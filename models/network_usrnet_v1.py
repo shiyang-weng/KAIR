@@ -2,8 +2,9 @@ import torch
 import torch.nn as nn
 import models.basicblock as B
 import numpy as np
-from utils import utils_image as util
+#from utils import utils_image as util
 import torch.fft
+import math
 
 
 # for pytorch version >= 1.8.1
@@ -147,8 +148,8 @@ class ResUNet(nn.Module):
     def forward(self, x):
         
         h, w = x.size()[-2:]
-        paddingBottom = int(np.ceil(h/8)*8-h)
-        paddingRight = int(np.ceil(w/8)*8-w)
+        paddingBottom = int(math.ceil(h/8)*8-h)
+        paddingRight = int(math.ceil(w/8)*8-w)
         x = nn.ReplicationPad2d((0, paddingRight, 0, paddingBottom))(x)
 
         x1 = self.m_head(x)
@@ -241,7 +242,8 @@ class USRNet(nn.Module):
         sf: integer, 1
         sigma: tensor, Nx1x1x1
         '''
-
+        if isinstance(sf, torch.Tensor):
+            sf = sf.item()
         # initialization & pre-calculation
         w, h = x.shape[-2:]
         FB = p2o(k, (w*sf, h*sf))

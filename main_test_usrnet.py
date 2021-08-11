@@ -18,7 +18,7 @@ from utils import utils_deblur
 from utils import utils_logger
 from utils import utils_sisr as sr
 from utils import utils_image as util
-from models.network_usrnet import USRNet as net
+from models.network_usrnet_v1 import USRNet as net
 
 
 '''
@@ -72,13 +72,13 @@ def main():
     # ----------------------------------------
     # Preparation
     # ----------------------------------------
-    model_name = 'usrnet'      # 'usrgan' | 'usrnet' | 'usrgan_tiny' | 'usrnet_tiny'
+    model_name = 'usrnet_tiny'      # 'usrgan' | 'usrnet' | 'usrgan_tiny' | 'usrnet_tiny'
     testset_name = 'set5'      # test set,  'set5' | 'srbsd68'
     test_sf = [4] if 'gan' in model_name else [2, 3, 4]  # scale factor, from {1,2,3,4}
 
     show_img = False           # default: False
-    save_L = True              # save LR image
-    save_E = True              # save estimated image
+    save_L = False              # save LR image
+    save_E = False              # save estimated image
     save_LEH = False           # save zoomed LR, E and H images
 
     # ----------------------------------------
@@ -119,8 +119,9 @@ def main():
         model = net(n_iter=8, h_nc=64, in_nc=4, out_nc=3, nc=[64, 128, 256, 512],
                     nb=2, act_mode="R", downsample_mode='strideconv', upsample_mode="convtranspose")
 
-    model.load_state_dict(torch.load(model_path), strict=True)
+    # model.load_state_dict(torch.load(model_path), strict=True)
     model.eval()
+    #model =  torch.jit.script(model)
     for key, v in model.named_parameters():
         v.requires_grad = False
     number_parameters = sum(map(lambda x: x.numel(), model.parameters()))
@@ -183,8 +184,11 @@ def main():
                 # --------------------------------
                 # (2) inference
                 # --------------------------------
+                print(x.shape,k.shape,sf,sigma.shape)
                 x = model(x, k, sf, sigma)
-
+                print(x.shape)
+                break
+                
                 # --------------------------------
                 # (3) img_E
                 # --------------------------------
