@@ -4,7 +4,7 @@ from time import time
 import os
 import intel_pytorch_extension as ipex
 import torch.autograd.profiler as profiler
-# ipex.enable_auto_mixed_precision(mixed_dtype = torch.bfloat16)
+#ipex.enable_auto_mixed_precision(mixed_dtype = torch.bfloat16)
 # os.environ["LD_PRELOAD"]="/root/miniconda3/envs/torch_intel/lib/libjemalloc.so"
 print("start test ipex+jemalloc: LD_PRELOAD={} , MALLOC_CONF={} ".format(os.environ.get("LD_PRELOAD"), os.environ.get("MALLOC_CONF")))
 

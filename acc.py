@@ -8,9 +8,9 @@ import torch.autograd.profiler as profiler
 # Preparation
 # ----------------------------------------
 channel = 3
-image_shape = [1, channel, 256, 256]
+image_shape = [1, channel, 1920, 1080]
 kernel_shape = [1, 1, 25, 25]
-loop = 50
+loop = 10
 warmup_num = 10
 
 model_name = 'usrnet_tiny'      # 'usrgan' | 'usrnet' | 'usrgan_tiny' | 'usrnet_tiny'
