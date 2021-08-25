@@ -1,5 +1,6 @@
 ## setup jemalloc
 `export MALLOC_CONF="oversize_threshold:1,background_thread:true,metadata_thp:auto,dirty_decay_ms:9000000000,muzzy_decay_ms:9000000000"`
+
 `export LD_PRELOAD=${your_python_env}/lib/libjemalloc.so`
 
 ## test_pytorch1.9
